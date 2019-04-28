@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenu"
+    android:background="#424242">
+
+    <ImageButton
+        android:id="@+id/help"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/help"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/main_title"
+        android:layout_width="210dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/app_icon"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/app_icon"
+        app:layout_constraintEnd_toEndOf="@+id/main_title"
+        app:layout_constraintStart_toStartOf="@+id/main_title"
+        app:layout_constraintTop_toBottomOf="@+id/main_title" />
+
+    <RadioButton
+        android:id="@+id/urlRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:padding="0dp"
+        android:textColor="#FFFFFF"
+        android:onClick="selectButton"
+        android:textSize="0sp"
+        app:layout_constraintEnd_toEndOf="@+id/fileRadioButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fileRadioButton"
+        app:layout_constraintTop_toBottomOf="@+id/fileRadioButton" />
+
+    <RadioButton
+        android:id="@+id/fileRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="60dp"
+        android:layout_weight="1"
+        android:onClick="selectButton"
+        android:padding="0dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_icon" />
+
+    <EditText
+        android:id="@+id/urlEditText"
+        android:layout_width="210dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:hint="URL of Video"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toBottomOf="@+id/urlRadioButton"
+        app:layout_constraintStart_toEndOf="@+id/urlRadioButton"
+        app:layout_constraintTop_toTopOf="@+id/urlRadioButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/fileEditText"
+        android:layout_width="210dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:hint="File Name"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toBottomOf="@+id/fileRadioButton"
+        app:layout_constraintStart_toEndOf="@+id/fileRadioButton"
+        app:layout_constraintTop_toTopOf="@+id/fileRadioButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/file_explorer"
+        app:layout_constraintBottom_toBottomOf="@+id/fileEditText"
+        app:layout_constraintStart_toEndOf="@+id/fileEditText"
+        app:layout_constraintTop_toTopOf="@+id/fileEditText"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/rounded_button_vector"
+        android:onClick="playVideo"
+        android:text="PLAY"
+        android:textColor="#000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
