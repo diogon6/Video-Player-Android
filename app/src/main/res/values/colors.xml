@@ -2,6 +2,6 @@
 <resources>
     <color name="colorPrimary">#0000FF</color>
     <color name="colorPrimaryDark">#0000FF</color>
-    <color name="colorAccent">#2EFEF7</color>
+    <color name="colorAccent">#01C0FB</color>
     <color name="corTerciaria">#CDDC39</color>
 </resources>
