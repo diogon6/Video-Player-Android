@@ -1,11 +1,15 @@
 package com.diogonobregadiogocruz.videoplayer;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.OpenableColumns;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,6 +60,9 @@ public class MainMenu extends AppCompatActivity {
 
     public void chooseVideo (View view)
     {
+        if(!isStoragePermissionGranted())
+            return;
+
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -73,7 +80,7 @@ public class MainMenu extends AppCompatActivity {
             if (resultData != null) {
                 uri = resultData.getData();
 
-                filePath = uri.getPath();
+                filePath = uri.toString();
 
                 selectedVideoName = getFileName(uri);
 
@@ -102,6 +109,28 @@ public class MainMenu extends AppCompatActivity {
             }
         }
         return result;
+    }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            chooseVideo(findViewById(R.id.fileChoser));
+        }
     }
 
     public void playVideo(View view)
