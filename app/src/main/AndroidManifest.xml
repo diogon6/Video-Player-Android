@@ -12,7 +12,9 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VideoMenu"></activity>
+        <activity android:name=".VideoMenu"
+            android:configChanges="orientation|screenSize">
+        </activity>
         <activity android:name=".MainMenu"
             android:screenOrientation="portrait">
             <intent-filter>
