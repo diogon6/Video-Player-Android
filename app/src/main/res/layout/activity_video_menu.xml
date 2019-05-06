@@ -33,4 +33,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <android.gesture.GestureOverlayView
+        android:id="@+id/gestures"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gestureStrokeType="multiple"
+        android:gestureColor="@color/colorAccent"
+        android:uncertainGestureColor="#165861"
+        android:eventsInterceptionEnabled="true"/>
+
 </android.support.constraint.ConstraintLayout>

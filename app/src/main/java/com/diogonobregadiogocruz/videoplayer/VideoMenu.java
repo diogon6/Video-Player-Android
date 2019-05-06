@@ -2,6 +2,11 @@ package com.diogonobregadiogocruz.videoplayer;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,12 +23,16 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-public class VideoMenu extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class VideoMenu extends AppCompatActivity implements GestureOverlayView.OnGesturePerformedListener {
 
     VideoView video;
     ImageView fullscreenButton;
     private static Boolean fullscreen;
     private CountDownTimer timer;
+    private GestureLibrary gestureLib;
+    GestureOverlayView gestureOverlayView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,13 @@ public class VideoMenu extends AppCompatActivity {
                 }
             }
         });
+
+        gestureOverlayView = findViewById(R.id.gestures);
+        gestureOverlayView.addOnGesturePerformedListener(this);
+        gestureLib = GestureLibraries.fromRawResource(this, R.raw.gesture);
+        if(!gestureLib.load())
+            finish();
+
     }
 
     public void fullScreenToggle(View view)
@@ -108,6 +124,18 @@ public class VideoMenu extends AppCompatActivity {
         {
             fullscreenButton.setBackground(getDrawable(R.drawable.fullscreen_icon));
             fullscreen = false;
+        }
+    }
+
+    @Override
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture)
+    {
+        ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+
+        for(Prediction prediction : predictions)
+        {
+            if(prediction.score > 1.0)
+                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT).show();
         }
     }
 }
