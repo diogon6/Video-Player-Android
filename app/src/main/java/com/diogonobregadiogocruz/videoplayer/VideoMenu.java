@@ -1,5 +1,6 @@
 package com.diogonobregadiogocruz.videoplayer;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.gesture.Gesture;
@@ -8,6 +9,7 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -33,6 +35,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     private CountDownTimer timer;
     private GestureLibrary gestureLib;
     GestureOverlayView gestureOverlayView;
+    private AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         fullscreen = false;
         video = findViewById(R.id.videoView);
         fullscreenButton = findViewById(R.id.fullscreenIcon);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         Uri uri;
 
         Bundle extras = getIntent().getExtras();
@@ -60,7 +64,6 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         MediaController mediaController = new MediaController(this);
         video.setMediaController(mediaController);
         mediaController.setAnchorView(video);
-
 
         //Determine if the video is horizontal or vertical
         //If it is vertical, it locks the screen rotation to PORTRAIT
@@ -134,8 +137,29 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
 
         for(Prediction prediction : predictions)
         {
-            if(prediction.score > 1.0)
-                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT).show();
+            if(prediction.score > 0.1)
+            {
+                switch (prediction.name)
+                {
+                    case ("Restart"):
+                        video.seekTo(0);
+                        return;
+                    case ("Forward"):
+                        video.seekTo(video.getCurrentPosition() + 15000);
+                        return;
+                    case ("Backward"):
+                        video.seekTo(video.getCurrentPosition() - 10000);
+                        return;
+                    case ("Volume Up"):
+                        audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+                        return;
+                    case ("Volume Down"):
+                        audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+                        return;
+                    default:
+                        return;
+                }
+            }
         }
     }
 }

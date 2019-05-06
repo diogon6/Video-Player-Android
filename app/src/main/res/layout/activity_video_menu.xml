@@ -7,39 +7,48 @@
     tools:context=".VideoMenu"
     android:background="#424242">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </FrameLayout>
-
-    <ImageView
-        android:id="@+id/fullscreenIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/fullscreen_icon"
-        android:onClick="fullScreenToggle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <android.gesture.GestureOverlayView
         android:id="@+id/gestures"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gestureStrokeType="multiple"
+        android:gestureStrokeLengthThreshold="20"
         android:gestureColor="@color/colorAccent"
         android:uncertainGestureColor="#165861"
-        android:eventsInterceptionEnabled="true"/>
+        android:eventsInterceptionEnabled="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <VideoView
+                    android:id="@+id/videoView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/fullscreenIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/fullscreen_icon"
+                    android:onClick="fullScreenToggle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.gesture.GestureOverlayView>
 
 </android.support.constraint.ConstraintLayout>
