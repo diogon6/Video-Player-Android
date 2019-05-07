@@ -36,6 +36,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     private GestureLibrary gestureLib;
     GestureOverlayView gestureOverlayView;
     private AudioManager audioManager;
+    private Boolean looping = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,15 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     fullscreenButton.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        video.setOnCompletionListener ( new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                if(looping)
+                    video.start();
             }
         });
 
@@ -137,7 +147,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
 
         for(Prediction prediction : predictions)
         {
-            if(prediction.score > 0.1)
+            if(prediction.score > 2.0)
             {
                 switch (prediction.name)
                 {
@@ -150,11 +160,15 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                     case ("Backward"):
                         video.seekTo(video.getCurrentPosition() - 10000);
                         return;
-                    case ("Volume Up"):
-                        audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+                    case ("Stop"):
+                        video.pause();
                         return;
-                    case ("Volume Down"):
-                        audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+                    case ("Play"):
+                        video.start();
+                        return;
+                    case ("Loop"):
+                        looping = !looping;
+                        Toast.makeText(this, "Looping: " + looping, Toast.LENGTH_SHORT).show();
                         return;
                     default:
                         return;
@@ -163,3 +177,5 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         }
     }
 }
+
+//audioManager.adjustVolume(RAISE, SHOW_UI
