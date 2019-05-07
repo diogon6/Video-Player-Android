@@ -2,10 +2,13 @@ package com.diogonobregadiogocruz.videoplayer;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.OpenableColumns;
@@ -14,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -26,6 +30,9 @@ public class MainMenu extends AppCompatActivity {
     RadioButton rbfile, rburl;
     private static final int READ_REQUEST_CODE = 42;
     private String filePath, selectedVideoName;
+    private Dialog helpDialog;
+    private DisplayMetrics metrics;
+    private int width, height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,12 @@ public class MainMenu extends AppCompatActivity {
         rburl = findViewById(R.id.urlRadioButton);
 
         fileName.setInputType(InputType.TYPE_NULL);
+
+        helpDialog = new Dialog(this);
+
+        metrics = getResources().getDisplayMetrics();
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
     }
 
     public void selectButton(View view)
@@ -183,5 +196,13 @@ public class MainMenu extends AppCompatActivity {
         }
 
         startActivity(intent);
+    }
+
+    public void showInfo(View view)
+    {
+        helpDialog.setContentView(R.layout.help_dialog);
+        helpDialog.getWindow().setLayout(width, height);
+        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialog.show();
     }
 }

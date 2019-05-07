@@ -30,13 +30,15 @@ import java.util.ArrayList;
 public class VideoMenu extends AppCompatActivity implements GestureOverlayView.OnGesturePerformedListener {
 
     VideoView video;
-    ImageView fullscreenButton;
-    private static Boolean fullscreen;
+    private Boolean fullscreen;
     private CountDownTimer timer;
     private GestureLibrary gestureLib;
     GestureOverlayView gestureOverlayView;
     private AudioManager audioManager;
     private Boolean looping = false;
+    private Boolean verticalOnly = false;
+    private static VideoMenu instance = null;
+    private int currentPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,9 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        instance = this;
         fullscreen = false;
         video = findViewById(R.id.videoView);
-        fullscreenButton = findViewById(R.id.fullscreenIcon);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         Uri uri;
 
@@ -62,7 +64,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         video.setVideoURI(uri);
         video.start();
 
-        MediaController mediaController = new MediaController(this);
+        MediaController mediaController = new CustomMediaController(this);
         video.setMediaController(mediaController);
         mediaController.setAnchorView(video);
 
@@ -75,7 +77,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                 if(mp.getVideoHeight() > mp.getVideoWidth())
                 {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    fullscreenButton.setVisibility(View.GONE);
+                    verticalOnly = true;
                 }
             }
         });
@@ -97,18 +99,39 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
 
     }
 
-    public void fullScreenToggle(View view)
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        currentPosition = video.getCurrentPosition();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        video.seekTo(currentPosition);
+    }
+
+    public static VideoMenu getInstance() {
+        return instance;
+    }
+
+    public void restart()
+    {
+        video.seekTo(0);
+    }
+
+    public void fullScreenToggle()
     {
         if(!fullscreen)
         {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            fullscreenButton.setBackground(getDrawable(R.drawable.fullscreen_exit_icon));
             fullscreen = true;
         }
         else
         {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            fullscreenButton.setBackground(getDrawable(R.drawable.fullscreen_icon));
             fullscreen = false;
         }
 
@@ -123,6 +146,16 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         }.start();
     }
 
+    public boolean isVerticalOnly()
+    {
+        return verticalOnly;
+    }
+
+    public boolean isFullscreen()
+    {
+        return fullscreen;
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -130,12 +163,10 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
-            fullscreenButton.setBackground(getDrawable(R.drawable.fullscreen_exit_icon));
             fullscreen = true;
         }
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
         {
-            fullscreenButton.setBackground(getDrawable(R.drawable.fullscreen_icon));
             fullscreen = false;
         }
     }
