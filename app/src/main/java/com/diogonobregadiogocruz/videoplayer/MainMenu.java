@@ -20,6 +20,7 @@ import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -201,6 +202,16 @@ public class MainMenu extends AppCompatActivity {
     public void showInfo(View view)
     {
         helpDialog.setContentView(R.layout.help_dialog);
+
+        Button okButton = (Button) helpDialog.findViewById(R.id.okButton);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpDialog.dismiss();
+            }
+        });
+
         helpDialog.getWindow().setLayout(width, height);
         helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         helpDialog.show();
