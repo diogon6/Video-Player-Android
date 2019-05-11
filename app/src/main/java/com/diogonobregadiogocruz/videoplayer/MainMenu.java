@@ -65,7 +65,7 @@ public class MainMenu extends AppCompatActivity {
             rburl.setChecked(false);
         }
 
-        if(view.getId() == R.id.urlRadioButton)
+        if(view.getId() == R.id.urlRadioButton || view.getId() == R.id.urlEditText)
         {
             rbfile.setChecked(false);
             rburl.setChecked(true);
@@ -100,6 +100,8 @@ public class MainMenu extends AppCompatActivity {
 
                 fileName.setText(selectedVideoName);
             }
+
+            selectButton(findViewById(R.id.fileRadioButton));
         }
     }
 

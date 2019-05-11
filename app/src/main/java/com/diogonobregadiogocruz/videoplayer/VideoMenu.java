@@ -1,6 +1,7 @@
 package com.diogonobregadiogocruz.videoplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.gesture.Gesture;
@@ -39,6 +40,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     private Boolean verticalOnly = false;
     private static VideoMenu instance = null;
     private int currentPosition = 0;
+    Intent _serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        _serviceIntent = new Intent(this, SensorService.class);
+        startService(_serviceIntent);
 
         instance = this;
         fullscreen = false;
@@ -96,7 +101,6 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         gestureLib = GestureLibraries.fromRawResource(this, R.raw.gesture);
         if(!gestureLib.load())
             finish();
-
     }
 
     @Override
@@ -115,11 +119,6 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
 
     public static VideoMenu getInstance() {
         return instance;
-    }
-
-    public void restart()
-    {
-        video.seekTo(0);
     }
 
     public void fullScreenToggle()
@@ -183,23 +182,22 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                 switch (prediction.name)
                 {
                     case ("Restart"):
-                        video.seekTo(0);
+                        restart();
                         return;
                     case ("Forward"):
-                        video.seekTo(video.getCurrentPosition() + 15000);
+                        forward();
                         return;
                     case ("Backward"):
-                        video.seekTo(video.getCurrentPosition() - 10000);
+                        backward();
                         return;
                     case ("Stop"):
-                        video.pause();
+                        stop();
                         return;
                     case ("Play"):
                         video.start();
                         return;
                     case ("Loop"):
-                        looping = !looping;
-                        Toast.makeText(this, "Looping: " + looping, Toast.LENGTH_SHORT).show();
+                        toggleLooping();
                         return;
                     default:
                         return;
@@ -207,6 +205,44 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
             }
         }
     }
-}
 
-//audioManager.adjustVolume(RAISE, SHOW_UI
+    public void toggleLooping()
+    {
+        looping = !looping;
+
+        if(looping)
+            Toast.makeText(this, "Looping: ON", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "Looping: OFF", Toast.LENGTH_SHORT).show();
+    }
+
+    public void restart()
+    {
+        video.seekTo(0);
+    }
+
+    public void stop()
+    {
+        video.pause();
+    }
+
+    public void forward()
+    {
+        video.seekTo(video.getCurrentPosition() + 15000);
+    }
+
+    public void backward()
+    {
+        video.seekTo(video.getCurrentPosition() - 10000);
+    }
+
+    public void raiseVolume()
+    {
+        audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+    }
+
+    public void lowerVolume()
+    {
+        audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+    }
+}

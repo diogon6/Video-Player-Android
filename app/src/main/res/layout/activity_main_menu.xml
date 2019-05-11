@@ -88,6 +88,7 @@
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="#FFF"
+        android:onClick="selectButton"
         app:layout_constraintBottom_toBottomOf="@+id/urlRadioButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

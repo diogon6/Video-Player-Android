@@ -12,6 +12,11 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".SensorService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity android:name=".VideoMenu"
             android:configChanges="orientation|screenSize">
         </activity>
