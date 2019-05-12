@@ -50,6 +50,8 @@ public class SensorService extends Service {
         Sensor gyrSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         if (gyrSensor != null)
             _sensorManager.registerListener(gyroscope_listener, gyrSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        else
+            Toast.makeText(getApplicationContext(), "Unfortunately your device does not have Gyroscope", Toast.LENGTH_SHORT).show();
 
         Sensor proxSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         if (proxSensor != null)
@@ -120,15 +122,33 @@ public class SensorService extends Service {
             //Up/Down rotation -> Volume Up/Down
             if(sensorEvent.values[orientation_volume_control] < - ROTATION_SENSITIVITY)
             {
-                videoMenu.raiseVolume();
-                Toast.makeText(getApplicationContext(), "Volume Up", Toast.LENGTH_SHORT).show();
+                if(videoMenu.isFullscreen())
+                {
+                    videoMenu.lowerVolume();
+                    Toast.makeText(getApplicationContext(), "Volume Down", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    videoMenu.raiseVolume();
+                    Toast.makeText(getApplicationContext(), "Volume Up", Toast.LENGTH_SHORT).show();
+                }
+
                 cool_down = 1000;
                 return;
             }
             if(sensorEvent.values[orientation_volume_control] > ROTATION_SENSITIVITY)
             {
-                videoMenu.lowerVolume();
-                Toast.makeText(getApplicationContext(), "Volume Down", Toast.LENGTH_SHORT).show();
+                if(videoMenu.isFullscreen())
+                {
+                    videoMenu.raiseVolume();
+                    Toast.makeText(getApplicationContext(), "Volume Up", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    videoMenu.lowerVolume();
+                    Toast.makeText(getApplicationContext(), "Volume Down", Toast.LENGTH_SHORT).show();
+                }
+
                 cool_down = 1000;
                 return;
             }
