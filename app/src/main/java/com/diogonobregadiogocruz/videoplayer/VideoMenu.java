@@ -50,9 +50,6 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        _serviceIntent = new Intent(this, SensorService.class);
-        startService(_serviceIntent);
-
         instance = this;
         fullscreen = false;
         video = findViewById(R.id.videoView);
@@ -65,6 +62,12 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
             uri = Uri.parse(extras.getString("Uri"));
         else
             uri = Uri.parse(extras.getString("Url"));
+
+        if(extras.getBoolean("sensorsEnabled"))
+        {
+            _serviceIntent = new Intent(this, SensorService.class);
+            startService(_serviceIntent);
+        }
 
         video.setVideoURI(uri);
         video.start();
@@ -115,6 +118,14 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         super.onResume();
 
         video.seekTo(currentPosition);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, SensorService.class);
+        this.stopService(intent);
+        this.finish();
     }
 
     public static VideoMenu getInstance() {

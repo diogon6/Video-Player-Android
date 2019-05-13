@@ -3,8 +3,10 @@ package com.diogonobregadiogocruz.videoplayer;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -23,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 public class MainMenu extends AppCompatActivity {
@@ -34,6 +37,8 @@ public class MainMenu extends AppCompatActivity {
     private Dialog helpDialog;
     private DisplayMetrics metrics;
     private int width, height;
+    private Switch switchSensors;
+    private SharedPreferences mySharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,11 @@ public class MainMenu extends AppCompatActivity {
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        mySharedPreferences = this.getSharedPreferences("mypref", Context.MODE_PRIVATE);
+
+        switchSensors = findViewById(R.id.switchSensors);
+        switchSensors.setChecked(mySharedPreferences.getBoolean("switchSensors", true));
 
         fileName = findViewById(R.id.fileEditText);
         urlName = findViewById(R.id.urlEditText);
@@ -55,6 +65,15 @@ public class MainMenu extends AppCompatActivity {
         metrics = getResources().getDisplayMetrics();
         width = metrics.widthPixels;
         height = metrics.heightPixels;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putBoolean("switchSensors", switchSensors.isChecked());
+        editor.commit();
     }
 
     public void selectButton(View view)
@@ -198,6 +217,7 @@ public class MainMenu extends AppCompatActivity {
             }
         }
 
+        intent.putExtra("sensorsEnabled", switchSensors.isChecked());
         startActivity(intent);
     }
 
