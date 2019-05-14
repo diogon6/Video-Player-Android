@@ -12,6 +12,7 @@ import android.gesture.Prediction;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -41,6 +42,8 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     private static VideoMenu instance = null;
     private int currentPosition = 0;
     Intent _serviceIntent;
+    PlaybackParams myPlayBackParams = null;
+    MediaPlayer myMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,13 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                 {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     verticalOnly = true;
+                }
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    myPlayBackParams = new PlaybackParams();
+                    myMediaPlayer = mp;
+                    myPlayBackParams.setSpeed(1);
+                    mp.setPlaybackParams(myPlayBackParams);
                 }
             }
         });
@@ -217,6 +227,9 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         }
     }
 
+
+    // Video manipulation methods
+    //#region
     public void toggleLooping()
     {
         looping = !looping;
@@ -256,4 +269,87 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     {
         audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
     }
+
+    public void slowDownVideo()
+    {
+        switch (Float.toString(myPlayBackParams.getSpeed()))
+        {
+            case "0.25":
+                Toast.makeText(this, "Minimum speed reached", Toast.LENGTH_SHORT).show();
+                return;
+            case "0.5":
+                myPlayBackParams.setSpeed(0.25f);
+                updateVideoSpeed();
+                return;
+            case "0.75":
+                myPlayBackParams.setSpeed(0.5f);
+                updateVideoSpeed();
+                return;
+            case "1.0":
+                myPlayBackParams.setSpeed(0.75f);
+                updateVideoSpeed();
+                return;
+            case "1.5":
+                myPlayBackParams.setSpeed(1);
+                updateVideoSpeed();
+                return;
+            case "2.0":
+                myPlayBackParams.setSpeed(1.5f);
+                updateVideoSpeed();
+                return;
+            case "3.0":
+                myPlayBackParams.setSpeed(2);
+                updateVideoSpeed();
+                return;
+            default:
+                myPlayBackParams.setSpeed(1);
+                updateVideoSpeed();
+                return;
+        }
+    }
+
+    public void speedUpVideo()
+    {
+        switch (Float.toString(myPlayBackParams.getSpeed()))
+        {
+            case "0.25":
+                myPlayBackParams.setSpeed(0.5f);
+                updateVideoSpeed();
+                return;
+            case "0.5":
+                myPlayBackParams.setSpeed(0.75f);
+                updateVideoSpeed();
+                return;
+            case "0.75":
+                myPlayBackParams.setSpeed(1);
+                updateVideoSpeed();
+                return;
+            case "1.0":
+                myPlayBackParams.setSpeed(1.5f);
+                updateVideoSpeed();
+                return;
+            case "1.5":
+                myPlayBackParams.setSpeed(2);
+                updateVideoSpeed();
+                return;
+            case "2.0":
+                myPlayBackParams.setSpeed(3);
+                updateVideoSpeed();
+                return;
+            case "3.0":
+                Toast.makeText(this, "Maximum speed reached", Toast.LENGTH_SHORT).show();
+                return;
+            default:
+                myPlayBackParams.setSpeed(1);
+                updateVideoSpeed();
+                return;
+        }
+    }
+
+    public void updateVideoSpeed()
+    {
+        myMediaPlayer.setPlaybackParams(myPlayBackParams);
+        Toast.makeText(this, "Video speed changed to " + myPlayBackParams.getSpeed(), Toast.LENGTH_SHORT).show();
+    }
+    //#endregion
 }
