@@ -106,15 +106,13 @@ public class SensorService extends Service {
             //Right/Left rotation -> Video Forward/Backward
             if(sensorEvent.values[orientation_video_progress] < - ROTATION_SENSITIVITY)
             {
-                videoMenu.backward();
-                Toast.makeText(getApplicationContext(), "Backward", Toast.LENGTH_SHORT).show();
+                videoMenu.slowDownVideo();
                 cool_down = 1000;
                 return;
             }
             if(sensorEvent.values[orientation_video_progress] > ROTATION_SENSITIVITY)
             {
-                videoMenu.forward();
-                Toast.makeText(getApplicationContext(), "Forward", Toast.LENGTH_SHORT).show();
+                videoMenu.speedUpVideo();
                 cool_down = 1000;
                 return;
             }
