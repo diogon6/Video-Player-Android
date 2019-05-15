@@ -25,7 +25,6 @@ public class SensorService extends Service {
 
     //listeners
     private GyroscopeSensorListener gyroscope_listener = new GyroscopeSensorListener();
-    private ProximitySensorListener proximity_listener = new ProximitySensorListener();
 
     VideoMenu videoMenu;
 
@@ -53,10 +52,6 @@ public class SensorService extends Service {
         else
             Toast.makeText(getApplicationContext(), "Unfortunately your device does not have Gyroscope", Toast.LENGTH_SHORT).show();
 
-        Sensor proxSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        if (proxSensor != null)
-            _sensorManager.registerListener(proximity_listener, proxSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
         return START_STICKY;
     }
 
@@ -65,7 +60,6 @@ public class SensorService extends Service {
     public void onDestroy(){
         super.onDestroy();
         _sensorManager.unregisterListener(gyroscope_listener);
-        _sensorManager.unregisterListener(proximity_listener);
     }
 
     private class GyroscopeSensorListener implements SensorEventListener{
@@ -150,20 +144,6 @@ public class SensorService extends Service {
                 cool_down = 1000;
                 return;
             }
-        }
-    }
-
-    private class ProximitySensorListener implements SensorEventListener {
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            //if(event.values[0] < 1)
-                //videoMenu.stop();
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
         }
     }
 }

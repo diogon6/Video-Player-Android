@@ -1,6 +1,7 @@
 package com.diogonobregadiogocruz.videoplayer;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,12 +14,16 @@ public class CustomMediaController extends MediaController {
     ImageButton fullscreenButton, restartButton, slowDownButton, speedUpButton;
     Context mContext;
     VideoMenu videoMenu;
+    private int screenWidth, screenHeight;
 
     public CustomMediaController(Context context) {
         super(context);
         mContext = context;
 
         videoMenu = VideoMenu.getInstance();
+
+        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class CustomMediaController extends MediaController {
 
     private View makeRestartView() {
         restartButton = new ImageButton(mContext);
-        restartButton.setY(40);
+        restartButton.setY(screenHeight/50);
         restartButton.setX(15);
         restartButton.setBackgroundResource(R.drawable.restart_icon);
 
@@ -75,8 +80,8 @@ public class CustomMediaController extends MediaController {
     private View SlowDownView()
     {
         slowDownButton = new ImageButton(mContext);
-        slowDownButton.setY(40);
-        slowDownButton.setX(155);
+        slowDownButton.setX(screenWidth/7);
+        slowDownButton.setY(screenHeight/50);
         slowDownButton.setBackgroundResource(R.drawable.slow_down_icon);
 
         slowDownButton.setOnClickListener(new OnClickListener() {
@@ -94,8 +99,8 @@ public class CustomMediaController extends MediaController {
     private View SpeedUpView()
     {
         speedUpButton = new ImageButton(mContext);
-        speedUpButton.setY(40);
-        speedUpButton.setX(-155);
+        speedUpButton.setY(screenHeight/50);
+        speedUpButton.setX(- screenWidth/7);
         speedUpButton.setBackgroundResource(R.drawable.speed_up_icon);
 
         speedUpButton.setOnClickListener(new OnClickListener() {
@@ -113,7 +118,7 @@ public class CustomMediaController extends MediaController {
     private View makeFullscreenView() {
 
         fullscreenButton = new ImageButton(mContext);
-        fullscreenButton.setY(30);
+        fullscreenButton.setY(screenHeight/60);
         fullscreenButton.setX(-15);
         fullscreenButton.setBackgroundResource(R.drawable.fullscreen_icon);
 

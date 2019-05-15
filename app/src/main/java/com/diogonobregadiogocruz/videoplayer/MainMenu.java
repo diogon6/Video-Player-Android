@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Switch;
-import android.widget.Toast;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -34,7 +33,7 @@ public class MainMenu extends AppCompatActivity {
     RadioButton rbfile, rburl;
     private static final int READ_REQUEST_CODE = 42;
     private String filePath, selectedVideoName;
-    private Dialog helpDialog;
+    private Dialog helpDialogGestures, helpDialogSensors;
     private DisplayMetrics metrics;
     private int width, height;
     private Switch switchSensors;
@@ -60,7 +59,8 @@ public class MainMenu extends AppCompatActivity {
 
         fileName.setInputType(InputType.TYPE_NULL);
 
-        helpDialog = new Dialog(this);
+        helpDialogGestures = new Dialog(this);
+        helpDialogSensors = new Dialog(this);
 
         metrics = getResources().getDisplayMetrics();
         width = metrics.widthPixels;
@@ -221,21 +221,41 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void showInfo(View view)
+    public void showHelpDialogGestures(View view)
     {
-        helpDialog.setContentView(R.layout.help_dialog);
+        helpDialogGestures.setContentView(R.layout.help_dialog_gestures);
 
-        Button okButton = (Button) helpDialog.findViewById(R.id.okButton);
+        Button nextButton = (Button) helpDialogGestures.findViewById(R.id.nextButton);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHelpDialogSensors();
+                //helpDialogGestures.dismiss();
+            }
+        });
+
+        helpDialogGestures.getWindow().setLayout(width, height);
+        helpDialogGestures.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialogGestures.show();
+    }
+
+    public void showHelpDialogSensors()
+    {
+        helpDialogSensors.setContentView(R.layout.help_dialog_sensors);
+
+        Button okButton = (Button) helpDialogSensors.findViewById(R.id.okButton);
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helpDialog.dismiss();
+                helpDialogGestures.dismiss();
+                helpDialogSensors.dismiss();
             }
         });
 
-        helpDialog.getWindow().setLayout(width, height);
-        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        helpDialog.show();
+        helpDialogSensors.getWindow().setLayout(width, height);
+        helpDialogSensors.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialogSensors.show();
     }
 }
