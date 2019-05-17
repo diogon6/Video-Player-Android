@@ -1,5 +1,6 @@
 package com.diogonobregadiogocruz.videoplayer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -38,6 +39,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     Intent _serviceIntent;
     PlaybackParams myPlayBackParams = null;
     MediaPlayer myMediaPlayer;
+    ProgressDialog loadingDialog;
 
     // How much time the forward and backward buttons/gestures do (ms)
     private final int FORWARD_TIME = 15000;
@@ -51,6 +53,13 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         // Hide the top bar which displays the battery, internet, etc.
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Creates and shows a progress loadingDialog, while the video is not prepared
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setMessage("Loading");
+        loadingDialog.setCancelable(false);
+        loadingDialog.setInverseBackgroundForced(true);
+        loadingDialog.show();
 
         instance = this;
         fullscreen = false;
@@ -103,6 +112,9 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                     myPlayBackParams.setSpeed(1);
                     mp.setPlaybackParams(myPlayBackParams);
                 }
+
+                // Dismiss the loading loadingDialog
+                loadingDialog.dismiss();
             }
         });
 
