@@ -1,23 +1,13 @@
 package com.diogonobregadiogocruz.videoplayer;
 
-import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class SensorService extends Service {
     private SensorManager _sensorManager;
@@ -28,11 +18,12 @@ public class SensorService extends Service {
 
     VideoMenu videoMenu;
 
-    private long lastUpdate = 0;
-    private int cool_down = 0;
-    private static final int ROTATION_SENSITIVITY = 2;
+    private long lastUpdate = 0;                        // Variable used to keep track of the time of last gyroscope trigger
+    private int cool_down = 0;                          // Variable used to avoid triggering the gyroscope multiple times in a short time (starts at 0)
+    private static final int ROTATION_SENSITIVITY = 2;  // Minimum angular velocity to activate the gyroscope
 
     public SensorService() {
+        // Get the instance of the video menu activity
         videoMenu = VideoMenu.getInstance();
     }
 
@@ -46,9 +37,13 @@ public class SensorService extends Service {
 
         _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
+        // Get the device's gyroscope
         Sensor gyrSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        // If the has gyroscope, then register it
         if (gyrSensor != null)
             _sensorManager.registerListener(gyroscope_listener, gyrSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        // If it doesn't, inform the user of it
         else
             Toast.makeText(getApplicationContext(), "Unfortunately your device does not have Gyroscope", Toast.LENGTH_SHORT).show();
 
@@ -69,42 +64,46 @@ public class SensorService extends Service {
 
         }
 
+        // Called every time the sensor value has changed
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
 
-            //If the video is in fullscreen mode we want to change "rotation command"
-            // in order to keep the same command int he user's point of view
-            int orientation_video_progress;
+            // If the video is in fullscreen mode we want to change "rotation command"
+            // in order to keep the same command in the user's point of view
+            int orientation_video_speed_control;
             int orientation_volume_control;
             if(videoMenu.isFullscreen())
             {
-                orientation_video_progress = 0;
+                orientation_video_speed_control = 0;
                 orientation_volume_control = 1;
             }
             else
             {
-                orientation_video_progress = 1;
+                orientation_video_speed_control = 1;
                 orientation_volume_control = 0;
             }
 
+            // Get current time
             long curTime = System.currentTimeMillis();
 
-            // only allow one update every 100ms.
+            // If the cool down isn't over yet, return
+            // Only allow one update every 1000ms
             if ((curTime - lastUpdate) < cool_down) {
                 return;
             }
 
+            // Reset these variables
             lastUpdate = curTime;
             cool_down = 0;
 
-            //Right/Left rotation -> Video Forward/Backward
-            if(sensorEvent.values[orientation_video_progress] < - ROTATION_SENSITIVITY)
+            //Right/Left rotation -> Video Speed Faster/Slower
+            if(sensorEvent.values[orientation_video_speed_control] < - ROTATION_SENSITIVITY)
             {
                 videoMenu.slowDownVideo();
                 cool_down = 1000;
                 return;
             }
-            if(sensorEvent.values[orientation_video_progress] > ROTATION_SENSITIVITY)
+            if(sensorEvent.values[orientation_video_speed_control] > ROTATION_SENSITIVITY)
             {
                 videoMenu.speedUpVideo();
                 cool_down = 1000;
@@ -114,6 +113,7 @@ public class SensorService extends Service {
             //Up/Down rotation -> Volume Up/Down
             if(sensorEvent.values[orientation_volume_control] < - ROTATION_SENSITIVITY)
             {
+                // Default fullscreen (left tilt) has inverted rotation in the y axis, so in this case we invert the result action as well
                 if(videoMenu.isFullscreen())
                 {
                     videoMenu.lowerVolume();
@@ -130,6 +130,7 @@ public class SensorService extends Service {
             }
             if(sensorEvent.values[orientation_volume_control] > ROTATION_SENSITIVITY)
             {
+                // Default fullscreen (left tilt) has inverted rotation in the y axis, so in this case we invert the result action as well
                 if(videoMenu.isFullscreen())
                 {
                     videoMenu.raiseVolume();
