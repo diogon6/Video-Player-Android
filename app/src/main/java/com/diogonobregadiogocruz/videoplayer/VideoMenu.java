@@ -57,7 +57,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         // Creates and shows a progress loadingDialog, while the video is not prepared
         loadingDialog = new ProgressDialog(this);
         loadingDialog.setMessage("Loading");
-        loadingDialog.setCancelable(false);
+        loadingDialog.setCancelable(true);
         loadingDialog.setInverseBackgroundForced(true);
         loadingDialog.show();
 
@@ -328,33 +328,28 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                 return;
             case "0.5":
                 myPlayBackParams.setSpeed(0.25f);
-                updateVideoSpeed();
-                return;
+                break;
             case "0.75":
                 myPlayBackParams.setSpeed(0.5f);
-                updateVideoSpeed();
-                return;
+                break;
             case "1.0":
                 myPlayBackParams.setSpeed(0.75f);
-                updateVideoSpeed();
-                return;
+                break;
             case "1.5":
                 myPlayBackParams.setSpeed(1);
-                updateVideoSpeed();
-                return;
+                break;
             case "2.0":
                 myPlayBackParams.setSpeed(1.5f);
-                updateVideoSpeed();
-                return;
+                break;
             case "3.0":
                 myPlayBackParams.setSpeed(2);
-                updateVideoSpeed();
-                return;
+                break;
             default:
                 myPlayBackParams.setSpeed(1);
-                updateVideoSpeed();
-                return;
+                break;
         }
+
+        updateVideoSpeed();
     }
 
     // Speeds up the video by one level
@@ -365,36 +360,31 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
         {
             case "0.25":
                 myPlayBackParams.setSpeed(0.5f);
-                updateVideoSpeed();
-                return;
+                break;
             case "0.5":
                 myPlayBackParams.setSpeed(0.75f);
-                updateVideoSpeed();
-                return;
+                break;
             case "0.75":
                 myPlayBackParams.setSpeed(1);
-                updateVideoSpeed();
-                return;
+                break;
             case "1.0":
                 myPlayBackParams.setSpeed(1.5f);
-                updateVideoSpeed();
-                return;
+                break;
             case "1.5":
                 myPlayBackParams.setSpeed(2);
-                updateVideoSpeed();
-                return;
+                break;
             case "2.0":
                 myPlayBackParams.setSpeed(3);
-                updateVideoSpeed();
-                return;
+                break;
             case "3.0":
                 Toast.makeText(this, "Maximum speed reached", Toast.LENGTH_SHORT).show();
                 return;
             default:
                 myPlayBackParams.setSpeed(1);
-                updateVideoSpeed();
-                return;
+                break;
         }
+
+        updateVideoSpeed();
     }
 
     // Updates the video speed with the new speed and informs the user of it
