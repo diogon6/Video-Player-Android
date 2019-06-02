@@ -266,7 +266,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     }
 
 
-    // Video manipulation methods
+    // Video control methods
     //#region
 
     // Activates and deactivates the looping feature when the video ends
