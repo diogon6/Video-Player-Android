@@ -254,6 +254,7 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
                         return;
                     case ("Play"):
                         video.start();
+                        Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
                         return;
                     case ("Loop"):
                         toggleLooping();
@@ -285,24 +286,28 @@ public class VideoMenu extends AppCompatActivity implements GestureOverlayView.O
     public void restart()
     {
         video.seekTo(0);
+        Toast.makeText(this, "Restart", Toast.LENGTH_SHORT).show();
     }
 
     // Stops the video
     public void stop()
     {
         video.pause();
+        Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
     }
 
     // Moves the video progress 15 seconds forward
     public void forward()
     {
         video.seekTo(video.getCurrentPosition() + FORWARD_TIME);
+        Toast.makeText(this, "Forward", Toast.LENGTH_SHORT).show();
     }
 
     // Moves the video progress 10 seconds backward
     public void backward()
     {
         video.seekTo(video.getCurrentPosition() - BACKWARD_TIME);
+        Toast.makeText(this, "Backward", Toast.LENGTH_SHORT).show();
     }
 
     // Raises the volume of the device by one level
